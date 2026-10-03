@@ -1,0 +1,23 @@
+[package]
+name = "book-kit-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.book-kit]
+path = ".."
+
+[[bin]]
+name = "replay_stream"
+path = "fuzz_targets/replay_stream.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]

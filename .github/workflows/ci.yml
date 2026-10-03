@@ -1,0 +1,56 @@
+# book-kit CI — chaos-kit structure: pinned reusable quality workflow,
+# plus this crate's headline gate (loom, the mandated invocation) and a
+# bench smoke. The reusable workflow's `loom` input stays off because its
+# invocation (`cargo test --release --lib` without `--features loom` /
+# preemption bounds) is not this crate's mandated loom gate; the dedicated
+# job below is the covering evidence for the seqlock protocol
+# (REQ-BOOK-007), miri-flags note: the arenas leak deliberately
+# (process-lifetime storage), so miri runs with -Zmiri-ignore-leaks.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    uses: WyattAu/engineering-standards/.github/workflows/rust-kit.yml@024f2b5fc013a77316077cea58c9820d1bbfdd28 # main @ 2026-10-02
+    with:
+      tier: a
+      all-features: true
+      loom: false
+      wasm: false
+      miri: true
+      miri-flags: "-Zmiri-ignore-leaks"
+
+  loom:
+    # Headline gate (REQ-BOOK-007): the mandated invocation, with a
+    # non-vacuousness check — every model must have run.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1 # v2.8.1
+      - name: loom models (REQ-BOOK-007)
+        run: |
+          RUSTFLAGS="--cfg loom" LOOM_MAX_PREEMPTIONS=2 \
+            cargo test --release --features loom loom -- --test-threads=1 2>&1 | tee loom.log
+          grep -E "test result: ok" loom.log
+          # Non-vacuousness guard: all four models must have run.
+          test "$(grep -cE '^test .*::loom_' loom.log)" -eq 4
+
+  bench-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1 # v2.8.1
+      - name: Criterion smoke (sanity, not a gate)
+        run: cargo bench -- --test

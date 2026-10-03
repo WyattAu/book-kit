@@ -1,0 +1,47 @@
+[package]
+name = "book-kit"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+description = "Lock-free limit order book — price-time priority, single-writer/multi-reader snapshots, zero-allocation hot path, generational ABA safety"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/WyattAu/book-kit"
+readme = "README.md"
+keywords = ["orderbook", "lock-free", "seqlock", "hft", "match-engine"]
+categories = ["concurrency", "data-structures", "finance"]
+exclude = ["/target", "/fuzz", "/mutants-out*", "pedantic.log", "loom.log"]
+
+[dependencies]
+loom = { version = "0.7", optional = true }
+
+[dev-dependencies]
+proptest = "1"
+criterion = "0.5"
+
+[features]
+default = ["alloc"]
+# Convenience constructors (`Book::with_capacity`, `BookBuf::new`,
+# `Book::reader`). The hot path itself is core-only: every mutable word a
+# reader can observe is an atomic, and the writer performs zero heap
+# allocation (REQ-BOOK-008).
+alloc = []
+# Loom model doubles of the seqlock protocol (REQ-BOOK-007). The model tests
+# are additionally gated on `--cfg loom` so they only exist under the
+# mandated invocation:
+#   RUSTFLAGS="--cfg loom" LOOM_MAX_PREEMPTIONS=2 \
+#     cargo test --release --features loom loom
+loom = ["dep:loom"]
+
+[[bench]]
+name = "book_bench"
+harness = false
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(loom)'] }
+
+[lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"
+
+[package.metadata.layers]
+tier = "L1"

@@ -1,0 +1,7 @@
+# cargo-mutants configuration — book-kit.
+#
+# Loom-cfg'd shims are excluded from mutation globs (breaker precedent;
+# MUTATION.md cfg-unviable doctrine): `src/loom_book.rs` only compiles
+# under `--cfg loom`, which the mutation harness does not set. The loom
+# harness is the named covering evidence for the seqlock protocol.
+exclude_globs = ["src/loom_book.rs"]
