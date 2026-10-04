@@ -8,6 +8,10 @@ version = "0.10"
 version = "1.1.5"
 criteria = "safe-to-deploy"
 
+[[exemptions.alloca]]
+version = "0.4.0"
+criteria = "safe-to-run"
+
 [[exemptions.anes]]
 version = "0.1.6"
 criteria = "safe-to-run"
@@ -76,8 +80,16 @@ criteria = "safe-to-run"
 version = "0.5.1"
 criteria = "safe-to-run"
 
+[[exemptions.criterion]]
+version = "0.8.2"
+criteria = "safe-to-run"
+
 [[exemptions.criterion-plot]]
 version = "0.5.0"
+criteria = "safe-to-run"
+
+[[exemptions.criterion-plot]]
+version = "0.8.2"
 criteria = "safe-to-run"
 
 [[exemptions.crossbeam-deque]]
@@ -156,6 +168,10 @@ criteria = "safe-to-run"
 version = "0.10.5"
 criteria = "safe-to-run"
 
+[[exemptions.itertools]]
+version = "0.13.0"
+criteria = "safe-to-run"
+
 [[exemptions.itoa]]
 version = "1.0.18"
 criteria = "safe-to-run"
@@ -206,6 +222,10 @@ criteria = "safe-to-deploy"
 
 [[exemptions.oorandom]]
 version = "11.1.5"
+criteria = "safe-to-run"
+
+[[exemptions.page_size]]
+version = "0.6.0"
 criteria = "safe-to-run"
 
 [[exemptions.pin-project-lite]]
