@@ -471,3 +471,6 @@ criteria = "safe-to-run"
 [[exemptions.zmij]]
 version = "1.0.23"
 criteria = "safe-to-run"
+
+[policy]
+audit-as-crates-io = true
