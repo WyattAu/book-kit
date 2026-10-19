@@ -4,6 +4,9 @@
 [cargo-vet]
 version = "0.10"
 
+[policy.book-kit]
+audit-as-crates-io = true
+
 [[exemptions.aho-corasick]]
 version = "1.1.5"
 criteria = "safe-to-deploy"
@@ -471,6 +474,3 @@ criteria = "safe-to-run"
 [[exemptions.zmij]]
 version = "1.0.23"
 criteria = "safe-to-run"
-
-[policy.book-kit]
-audit-as-crates-io = true
