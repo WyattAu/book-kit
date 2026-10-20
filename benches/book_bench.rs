@@ -8,7 +8,8 @@
 //! regression gate.
 
 use book_kit::{Book, BookBuf, Command, OrderId};
-use criterion::{black_box, criterion_group, criterion_main, BatchSize, Criterion};
+use std::hint::black_box;
+use criterion::{criterion_group, criterion_main, BatchSize, Criterion};
 
 fn bench_apply(c: &mut Criterion) {
     c.bench_function("apply_add", |b| {
