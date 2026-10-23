@@ -1,4 +1,4 @@
-# Security Policy — book-kit
+# Security Policy: book-kit
 
 ## Supported versions
 
@@ -22,7 +22,7 @@ book-kit is an in-memory order-book substrate. Security-relevant surfaces:
 
 - **Integrity, not adversarial hashing**: `checksum()` is FNV-1a-64, a
   non-cryptographic *detection* hash (spec §Risk register). Do not use it
-  as an authenticity mechanism — snapshot verification against accidental
+  as an authenticity mechanism: snapshot verification against accidental
   corruption only. If stronger hashing is required, compose a
   cryptographic hash at the consumer edge.
 - **Single-writer contract**: `apply` takes `&mut Book` (two writers are a

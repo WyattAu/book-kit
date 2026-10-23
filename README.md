@@ -4,7 +4,7 @@
 [![crates.io](https://img.shields.io/crates/v/book-kit.svg)](https://crates.io/crates/book-kit)
 [![License](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue.svg)](LICENSE)
 
-Lock-free **limit order book** — price-time priority, single-writer/
+Lock-free **limit order book**: price-time priority, single-writer/
 multi-reader snapshots, zero-allocation hot path, generational ABA safety.
 
 book-kit is the state substrate *under* a matching engine or feed handler,
@@ -27,10 +27,10 @@ reader threads ─▶│ try_read / read -> BookBuf snapshot (version-consistent
 
 - **Price-time priority**: aggregated-per-price (L2) and order-by-order
   (L3) FIFO views, mutually consistent at every version
-- **Typed everything**: `apply(Command) -> Result<Applied, Reject>` — six
+- **Typed everything**: `apply(Command) -> Result<Applied, Reject>`: six
   typed rejects, no panics, no silent drops; `Bid`/`Ask` are distinct types
   behind a sealed `Side` trait, never `bool`
-- **Numeric discipline**: `i64` tick prices, `u64` quantities — **no `f64`
+- **Numeric discipline**: `i64` tick prices, `u64` quantities: **no `f64`
   anywhere on the hot path**
 - **Zero allocation**: `apply`, `try_read`/`read`, `checksum`, and every
   view iterator are allocation-free once the book and buffer exist
@@ -46,12 +46,12 @@ reader threads ─▶│ try_read / read -> BookBuf snapshot (version-consistent
 One writer bumps an odd/even seqlock counter around each mutation; readers
 reject odd or changed counters (`Torn` is a *report*, never an observed
 state). `try_read` is one attempt; `read(buf, max_spins)` is bounded retry
-with a spin hint — the bound is caller-visible. Livelock under a hot writer
+with a spin hint: the bound is caller-visible. Livelock under a hot writer
 is possible by design and documented (spec §Risk register).
 
 The full ordering matrix lives in [`ORDERING.md`](ORDERING.md) and on the
 [`book`](https://docs.rs/book-kit) module docs. Headline: **every protocol
-access is `SeqCst` — data words included** — because a seqlock with relaxed
+access is `SeqCst`, data words included**, because a seqlock with relaxed
 data copies is unsound on the C++/Rust memory model even with a `SeqCst`
 version counter (the Boehm seqlock result; the argument is spelled out in
 the module docs). This is the one deliberate divergence from the
@@ -101,11 +101,11 @@ assert_eq!(report.applied, 1);
 ## Capacity & memory
 
 `Book::with_capacity(max_orders, max_levels)` builds the arenas over
-process-lifetime (leaked) heap storage — books are long-lived substrate
+process-lifetime (leaked) heap storage: books are long-lived substrate
 objects; the crate stays `unsafe`-free. `Book::with_arena(orders, levels)`
 accepts caller-owned static memory in core-only builds. `BookBuf` capacity
 is explicit; a snapshot deeper than the buffer fails with
-`Torn::BufferTooSmall` — truncation is a typed error, never silent partial
+`Torn::BufferTooSmall`: truncation is a typed error, never silent partial
 state.
 
 Generation counters are `u32`: a slot must be recycled 2³² times before a
@@ -122,11 +122,11 @@ gate, never as a perf regression gate.
 | flag      | default | effect                                                     |
 |-----------|---------|------------------------------------------------------------|
 | `alloc`   | ✅      | `with_capacity`, `BookBuf::new`, `Book::reader`            |
-| `loom`    | —       | loom model doubles + models (`--cfg loom` invocation)      |
+| `loom`    |    no   || loom model doubles + models (`--cfg loom` invocation)      |
 
 Internals are core-only either way. The `no_std` *claim* is deferred
 (spec §Decisions 6): the v1 target is Linux HFT hosts, `u64` atomics
-assumed — revisit before any no_std announcement.
+assumed: revisit before any no_std announcement.
 
 ## Requirements traceability
 
