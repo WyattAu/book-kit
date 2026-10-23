@@ -1,4 +1,5 @@
 # book-kit
+[![Estate integration](https://github.com/WyattAu/estate-integration/actions/workflows/ci.yml/badge.svg)](https://github.com/WyattAu/estate-integration/actions/workflows/ci.yml)
 
 [![docs.rs](https://docs.rs/book-kit/badge.svg)](https://docs.rs/book-kit)
 [![crates.io](https://img.shields.io/crates/v/book-kit.svg)](https://crates.io/crates/book-kit)
