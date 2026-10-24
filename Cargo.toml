@@ -1,9 +1,9 @@
 [package]
 name = "book-kit"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 rust-version = "1.85"
-description = "Lock-free limit order book — price-time priority, single-writer/multi-reader snapshots, zero-allocation hot path, generational ABA safety"
+description = "Lock-free limit order book: price-time priority, single-writer/multi-reader snapshots, zero-allocation hot path, loom-verified"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/WyattAu/book-kit"
 readme = "README.md"
